@@ -78,3 +78,70 @@ Produto N:M Vendedor
 
 * Um produto pode ser vendido por vários vendedores terceiros (marketplace), e cada vendedor pode ter vários produtos.
 Tabela associativa: ProdutoVendedor.
+
+Segue algumas consultas:
+
+1. Listar todos os clientes (PF e PJ)
+SELECT c.idCliente,
+       c.Nome,
+       c.Identificação,
+       c.Endereço
+FROM Cliente c;
+
+
+2. Listar todos os produtos disponíveis e seus valores
+SELECT p.idProduto,
+       p.Categoria,
+       p.Descrição,
+       p.Valor
+FROM Produto p;
+
+
+3. Consultar pedidos com seus respectivos clientes
+SELECT pe.idPedido,
+       pe.Status_do_pedido,
+       pe.Descrição,
+       c.Nome AS Cliente,
+       pe.Frete
+FROM Pedido pe
+JOIN Cliente c ON pe.Cliente_idCliente = c.idCliente;
+
+
+4. Mostrar os produtos comprados em cada pedido
+SELECT pe.idPedido,
+       c.Nome AS Cliente,
+       p.Descrição AS Produto,
+       rp.Quantidade
+FROM Pedido pe
+JOIN Cliente c ON pe.Cliente_idCliente = c.idCliente
+JOIN Relação_de_Produto_pedido rp ON rp.Pedido_idPedido = pe.idPedido
+JOIN Produto p ON rp.Produto_idProduto = p.idProduto;
+
+
+5. Consultar entregas com código de rastreio e status
+SELECT e.idEntrega,
+       e.CodigoRastreio,
+       e.Status,
+       e.DataEnvio,
+       e.DataEntrega
+FROM Entrega e;
+
+
+6. Mostrar pagamentos realizados por pedido
+SELECT pa.idPagamento,
+       pa.idPedido,
+       pa.TipoPagamento,
+       pa.Valor,
+       pa.DataPagamento
+FROM Pagamento pa;
+
+
+7. Listar fornecedores e os produtos que eles disponibilizam
+SELECT f.idFornecedor,
+       f.RazãoSocial,
+       p.Descrição AS Produto,
+       p.Valor
+FROM Fornecedor f
+JOIN Disponibiliza_o_produto dp ON dp.Fornecedor_idFornecedor = f.idFornecedor
+JOIN Produto p ON dp.Produto_idProduto = p.idProduto;
+
